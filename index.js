@@ -18,9 +18,45 @@ async function run() {
     try {
         await client.connect();
         const database = client.db("happy-resort-101");
-        const usersCollection = database.collection("rooms");
+        const roomsCollection = database.collection("rooms");
 
         console.log('database connected');
+        // GET API
+        app.get('/rooms', async (req, res) => {
+            const cursor = roomsCollection.find({}).sort({ _id: -1 });
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        // GET API With
+        app.get('/rooms/:id', async (req, res) => {
+            const id = req.params.id;
+
+            const query = { _id: ObjectId(id) };
+            const result = await roomsCollection.findOne(query);
+            console.log(result);
+            res.send(result);
+        })
+
+
+        // POST API
+        app.post('/rooms', async (req, res) => {
+            console.log('hiting users api', req.body);
+            const newRoom = req.body;
+            const result = await roomsCollection.insertOne(newRoom);
+            console.log(`A document was inserted with the _id: ${result.insertedId}`);
+            res.json(result);
+        })
+
+        // DELETE API
+        app.delete('/rooms/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+
+            const result = await roomsCollection.deleteOne(query);
+            console.log(result);
+            res.send(result)
+        })
     }
     finally {
         // await client.close()

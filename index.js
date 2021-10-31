@@ -64,7 +64,7 @@ async function run() {
         app.post('/orders', async (req, res) => {
             console.log('hiting orders api', req.body);
             const newOrder = req.body;
-            const result = await roomsCollection.insertOne(newOrder);
+            const result = await ordersCollection.insertOne(newOrder);
             console.log(`A document was inserted with the _id: ${result.insertedId}`);
             res.json(result);
         })

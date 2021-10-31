@@ -19,6 +19,7 @@ async function run() {
         await client.connect();
         const database = client.db("happy-resort-101");
         const roomsCollection = database.collection("rooms");
+        const ordersCollection = database.collection("orders");
 
         console.log('database connected');
         // GET API
@@ -56,6 +57,16 @@ async function run() {
             const result = await roomsCollection.deleteOne(query);
             console.log(result);
             res.send(result)
+        })
+
+        //Orders
+        // POST API
+        app.post('/orders', async (req, res) => {
+            console.log('hiting orders api', req.body);
+            const newOrder = req.body;
+            const result = await roomsCollection.insertOne(newOrder);
+            console.log(`A document was inserted with the _id: ${result.insertedId}`);
+            res.json(result);
         })
     }
     finally {

@@ -60,6 +60,12 @@ async function run() {
         })
 
         //Orders
+        //Get API
+        app.get('/orders', async (req, res) => {
+            const cursor = ordersCollection.find({}).sort({ _id: -1 });
+            const result = await cursor.toArray();
+            res.send(result);
+        })
         // POST API
         app.post('/orders', async (req, res) => {
             console.log('hiting orders api', req.body);

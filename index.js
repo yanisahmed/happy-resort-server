@@ -74,6 +74,20 @@ async function run() {
             console.log(`A document was inserted with the _id: ${result.insertedId}`);
             res.json(result);
         })
+        //Update API
+        app.put('/orders/:id', async (req, res) => {
+            const id = req.params.id;
+            const status = req.body;
+            const filter = { _id: ObjectId(id) }
+            const options = { upsert: true };;
+            const updateDoc = {
+                $set: {
+                    status: `Confirmed`
+                },
+            };
+            const result = await ordersCollection.updateOne(filter, updateDoc, options);
+            res.json(result);
+        })
         // DELETE API
         app.delete('/orders/:id', async (req, res) => {
             const id = req.params.id;
